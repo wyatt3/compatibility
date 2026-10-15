@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, type ReactNode } from 'react'
 import { Home } from './screens/Home'
 import { Lobby } from './screens/Lobby'
 import { Round } from './screens/Round'
@@ -95,32 +95,35 @@ export default function App() {
 
   const currentPlayer = session?.players.find((p) => p.id === playerId) ?? null
 
+  let screen: ReactNode = null
+  let viewKey = 'home'
+
   if (restoring) {
-    return (
+    viewKey = 'restoring'
+    screen = (
       <div className="container">
         <div className="card">
           <p className="status">Reconnecting to your session…</p>
         </div>
       </div>
     )
-  }
-
-  if (!session || !currentPlayer) {
+  } else if (!session || !currentPlayer) {
     const resume = sessionStore.getResumeSession()
-    return <Home socket={socket} resume={resume} />
+    screen = <Home socket={socket} resume={resume} />
+  } else if (session.state === 'lobby') {
+    viewKey = 'lobby'
+    screen = <Lobby session={session} currentPlayer={currentPlayer} socket={socket} />
+  } else if (session.state === 'round') {
+    viewKey = `round-${session.roundIndex}`
+    screen = <Round session={session} currentPlayer={currentPlayer} socket={socket} categories={categories} />
+  } else if (session.state === 'reveal') {
+    viewKey = `reveal-${session.roundIndex}`
+    screen = <Reveal session={session} currentPlayer={currentPlayer} socket={socket} categories={categories} />
   }
 
-  if (session.state === 'lobby') {
-    return <Lobby session={session} currentPlayer={currentPlayer} socket={socket} />
-  }
-
-  if (session.state === 'round') {
-    return <Round session={session} currentPlayer={currentPlayer} socket={socket} categories={categories} />
-  }
-
-  if (session.state === 'reveal') {
-    return <Reveal session={session} currentPlayer={currentPlayer} socket={socket} categories={categories} />
-  }
-
-  return null
+  return (
+    <div className="view" key={viewKey}>
+      {screen}
+    </div>
+  )
 }

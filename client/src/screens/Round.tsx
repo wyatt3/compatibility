@@ -44,8 +44,12 @@ export function Round({ session, currentPlayer, socket, categories }: Props) {
     <div className="container">
       <Header code={session.code} />
       <div className="card">
-        {session.currentPrompts.map((p: Prompt) => (
-          <div key={p.index} className="prompt-card">
+        {session.currentPrompts.map((p: Prompt, i: number) => (
+          <div
+            key={p.index}
+            className="prompt-card"
+            style={{ animationDelay: `${i * 0.07}s` }}
+          >
             <div className="category-name">{categories.find((c) => c.id === p.catId)?.name ?? p.catId}</div>
             <div className="prompt-text">{p.text}</div>
             <div className="rating-slider">

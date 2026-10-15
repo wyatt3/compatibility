@@ -5,7 +5,9 @@ interface Props {
 export function Header({ code }: Props) {
   return (
     <header className="app-header">
-      {code && <span className="code-chip">{code}</span>}
+      <div className="app-header-inner">
+        {code && <span className="code-chip">{code}</span>}
+      </div>
     </header>
   )
 }
