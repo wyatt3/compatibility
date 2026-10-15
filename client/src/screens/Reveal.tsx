@@ -68,6 +68,7 @@ export function Reveal({ session, currentPlayer, socket, categories }: Props) {
   }
 
   const bothReady = p1.ready && p2.ready
+  const partner = p1.id === currentPlayer.id ? p2 : p1
 
   return (
     <div className="container">
@@ -83,9 +84,10 @@ export function Reveal({ session, currentPlayer, socket, categories }: Props) {
           </div>
         </div>
         {scored.map(({ pr, a, b, diff }, i) => {
+          const iAmP1 = currentPlayer.id === p1.id
           const rows = [
-            { player: p1, value: a, cls: 'p1' },
-            { player: p2, value: b, cls: 'p2' }
+            { player: currentPlayer, value: iAmP1 ? a : b, cls: 'p1' },
+            { player: partner, value: iAmP1 ? b : a, cls: 'p2' }
           ]
           const match = diff != null ? matchInfo(diff) : null
           return (
