@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type CSSProperties } from 'react'
 import type { Session, Player, Prompt, Category } from '../types'
 import type { Socket } from 'socket.io-client'
 import { Header } from '../components/Header'
@@ -60,6 +60,7 @@ export function Round({ session, currentPlayer, socket, categories }: Props) {
                 step={1}
                 value={ratings[p.index]}
                 onChange={(e) => setRating(p.index, Number(e.target.value))}
+                style={{ '--ratio': `${(ratings[p.index] - 1) / 4}` } as CSSProperties}
               />
               <div className="rating-ticks">
                 <span className="tick-label">Disagree</span>

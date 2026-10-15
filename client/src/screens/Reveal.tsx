@@ -101,20 +101,30 @@ export function Reveal({ session, currentPlayer, socket, categories }: Props) {
               <div className="prompt-text" style={{ fontSize: '0.95rem' }}>{pr.text}</div>
               <div className="comparison-sliders">
                 {rows.map(({ player, value, cls }) => {
-                  const pct = value != null ? ((value - 1) / 4) * 100 : 0
+                  const ratio = value != null ? (value - 1) / 4 : 0
+                  const pos = `calc(9px + (100% - 18px) * ${ratio})`
                   return (
                     <div key={player.id} className="comparison-slider-row">
                       <span className="slider-player">{player.name}</span>
                       <div className="slider-track">
-                        <div className={`slider-fill ${cls}`} style={{ width: `${pct}%` }} />
+                        <div className={`slider-fill ${cls}`} style={{ width: value != null ? pos : '0%' }} />
                         {value != null && (
-                          <span className={`slider-thumb ${cls}`} style={{ left: `${pct}%` }} />
+                          <span className={`slider-thumb ${cls}`} style={{ left: pos }} />
                         )}
                       </div>
-                      <span className="slider-value">{value ?? '-'}</span>
                     </div>
                   )
                 })}
+                <div className="comparison-slider-row comparison-axis">
+                  <span className="slider-player" aria-hidden="true" />
+                  <div className="rating-ticks">
+                    <span className="tick-label">Disagree</span>
+                    <span className="tick" />
+                    <span className="tick" />
+                    <span className="tick" />
+                    <span className="tick-label">Agree</span>
+                  </div>
+                </div>
               </div>
             </div>
           )

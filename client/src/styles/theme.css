@@ -482,9 +482,10 @@ input {
 }
 
 .rating-slider input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
   width: 100%;
   height: 2.5rem;
-  accent-color: var(--primary);
   cursor: pointer;
   background: transparent;
   border-radius: var(--radius-sm);
@@ -494,6 +495,57 @@ input {
   outline: 2px solid var(--primary);
   outline-offset: 4px;
   border-radius: 0;
+}
+
+.rating-slider input[type='range']::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(139, 123, 255, 0.5) 0,
+    var(--primary) calc(9px + (100% - 18px) * var(--ratio, 0)),
+    rgba(255, 255, 255, 0.1) calc(9px + (100% - 18px) * var(--ratio, 0)),
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.rating-slider input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--primary);
+  box-shadow: 0 0 14px -1px rgba(139, 123, 255, 0.9);
+  cursor: pointer;
+}
+
+.rating-slider input[type='range']::-moz-range-track {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.rating-slider input[type='range']::-moz-range-progress {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(139, 123, 255, 0.5) 0%, var(--primary) 100%);
+}
+
+.rating-slider input[type='range']::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--primary);
+  box-shadow: 0 0 14px -1px rgba(139, 123, 255, 0.9);
+  cursor: pointer;
 }
 
 .rating-ticks {
@@ -695,13 +747,23 @@ input {
 }
 
 .slider-player {
+  flex: 0 0 5.25rem;
   font-weight: 600;
   font-size: 0.85rem;
   color: var(--text);
-  min-width: 5.25rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.comparison-axis {
+  margin-top: -0.35rem;
+}
+
+.comparison-axis .rating-ticks {
+  flex: 1;
+  margin: 0 0.9rem;
+  padding: 0 5px;
 }
 
 .slider-track {
@@ -747,14 +809,6 @@ input {
 .slider-thumb.p2 {
   border-color: var(--accent);
   box-shadow: 0 0 14px -1px rgba(255, 77, 141, 0.9);
-}
-
-.slider-value {
-  font-weight: 800;
-  font-size: 0.85rem;
-  color: var(--text);
-  min-width: 1.25rem;
-  text-align: center;
 }
 
 /* ---------- Footer ---------- */
