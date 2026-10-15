@@ -30,10 +30,12 @@ app.use(express.json())
 const dataPath = path.resolve(__dirname, '../data/prompts.json')
 const data = JSON.parse(readFileSync(dataPath, 'utf-8')) as {
   categories: Category[]
-  prompts: Prompt[]
+  prompts: Array<{ catId: string; text: string }>
 }
 
-const store = new GameStore(data.prompts, data.categories)
+const prompts: Prompt[] = data.prompts.map((p, index) => ({ index, ...p }))
+
+const store = new GameStore(prompts, data.categories)
 
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', sessions: store.getSessionCount() })
@@ -125,7 +127,7 @@ io.on('connection', (socket) => {
     io.to(session.code).emit('round_started', { session: updated })
   })
 
-  socket.on('submit_answers', (payload: { code: string; answers: Array<{ promptId: string; rating: number }> }) => {
+  socket.on('submit_answers', (payload: { code: string; answers: Array<{ promptIndex: number; rating: number }> }) => {
     const { code, answers } = payload
     const session = store.getSession(code.toUpperCase())
     if (!session) {

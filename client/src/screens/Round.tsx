@@ -11,20 +11,20 @@ interface Props {
 }
 
 export function Round({ session, currentPlayer, socket, categories }: Props) {
-  const [ratings, setRatings] = useState<Record<string, number>>(() =>
-    Object.fromEntries(session.currentPrompts.map((p) => [p.id, 3]))
+  const [ratings, setRatings] = useState<Record<number, number>>(() =>
+    Object.fromEntries(session.currentPrompts.map((p) => [p.index, 3]))
   )
-  const allRated = session.currentPrompts.every((p) => ratings[p.id] !== undefined)
+  const allRated = session.currentPrompts.every((p) => ratings[p.index] !== undefined)
 
-  const setRating = (promptId: string, rating: number) => {
-    setRatings((prev) => ({ ...prev, [promptId]: rating }))
+  const setRating = (promptIndex: number, rating: number) => {
+    setRatings((prev) => ({ ...prev, [promptIndex]: rating }))
   }
 
   const submit = () => {
     if (!allRated) return
     const answers = session.currentPrompts.map((p) => ({
-      promptId: p.id,
-      rating: ratings[p.id]
+      promptIndex: p.index,
+      rating: ratings[p.index]
     }))
     socket?.emit('submit_answers', { code: session.code, answers })
   }
@@ -45,7 +45,7 @@ export function Round({ session, currentPlayer, socket, categories }: Props) {
       <Header code={session.code} />
       <div className="card">
         {session.currentPrompts.map((p: Prompt) => (
-          <div key={p.id} className="prompt-card">
+          <div key={p.index} className="prompt-card">
             <div className="category-name">{categories.find((c) => c.id === p.catId)?.name ?? p.catId}</div>
             <div className="prompt-text">{p.text}</div>
             <div className="rating-slider">
@@ -54,8 +54,8 @@ export function Round({ session, currentPlayer, socket, categories }: Props) {
                 min={1}
                 max={5}
                 step={1}
-                value={ratings[p.id]}
-                onChange={(e) => setRating(p.id, Number(e.target.value))}
+                value={ratings[p.index]}
+                onChange={(e) => setRating(p.index, Number(e.target.value))}
               />
               <div className="rating-ticks">
                 {[1, 2, 3, 4, 5].map((n) => (

@@ -29,7 +29,7 @@ export class GameStore {
       players: [],
       state: 'lobby',
       roundIndex: 0,
-      usedPromptIds: [],
+      usedPromptIndices: [],
       currentPrompts: [],
       answers: []
     }
@@ -121,9 +121,9 @@ export class GameStore {
     session.state = 'round'
     session.roundIndex += 1
 
-    const used = new Set(session.usedPromptIds)
+    const used = new Set(session.usedPromptIndices)
     for (const cat of this.categories) {
-      const catPrompts = this.prompts.filter((p) => p.catId === cat.id && !used.has(p.id))
+      const catPrompts = this.prompts.filter((p) => p.catId === cat.id && !used.has(p.index))
       let selected: Prompt | undefined
       if (catPrompts.length > 0) {
         selected = catPrompts[Math.floor(Math.random() * catPrompts.length)]
@@ -133,23 +133,23 @@ export class GameStore {
         if (allCat.length > 0) {
           selected = allCat[Math.floor(Math.random() * allCat.length)]
           // remove old used from this cat to allow cycling
-          session.usedPromptIds = session.usedPromptIds.filter((id) => {
-            const pr = this.prompts.find((x) => x.id === id)
+          session.usedPromptIndices = session.usedPromptIndices.filter((index) => {
+            const pr = this.prompts.find((x) => x.index === index)
             return pr && pr.catId !== cat.id
           })
           used.clear()
-          for (const id of session.usedPromptIds) used.add(id)
+          for (const index of session.usedPromptIndices) used.add(index)
         }
       }
       if (selected) {
         session.currentPrompts.push(selected)
-        session.usedPromptIds.push(selected.id)
+        session.usedPromptIndices.push(selected.index)
       }
     }
     return session
   }
 
-  submitAnswers(code: string, socketId: string, answers: Array<{ promptId: string; rating: number }>): Session {
+  submitAnswers(code: string, socketId: string, answers: Array<{ promptIndex: number; rating: number }>): Session {
     const session = this.getSession(code)
     if (!session) {
       throw new Error('Session not found')
@@ -161,7 +161,7 @@ export class GameStore {
     // remove previous answers for this player
     session.answers = session.answers.filter((a) => a.playerId !== player.id)
     for (const a of answers) {
-      session.answers.push({ playerId: player.id, promptId: a.promptId, rating: a.rating })
+      session.answers.push({ playerId: player.id, promptIndex: a.promptIndex, rating: a.rating })
     }
     player.submitted = true
     if (session.players.every((p) => p.submitted)) {

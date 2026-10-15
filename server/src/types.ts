@@ -4,7 +4,7 @@ export interface Category {
 }
 
 export interface Prompt {
-  id: string
+  index: number
   catId: string
   text: string
 }
@@ -21,7 +21,7 @@ export type SessionState = 'lobby' | 'round' | 'reveal'
 
 export interface Answer {
   playerId: string
-  promptId: string
+  promptIndex: number
   rating: number // 1-5
 }
 
@@ -30,7 +30,7 @@ export interface Session {
   players: Player[]
   state: SessionState
   roundIndex: number
-  usedPromptIds: string[]
+  usedPromptIndices: number[]
   currentPrompts: Prompt[]
   answers: Answer[]
 }

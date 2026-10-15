@@ -14,8 +14,8 @@ function getCategoryName(catId: string, categories: Array<{ id: string; name: st
   return c?.name || catId
 }
 
-function getAnswer(session: Session, playerId: string, promptId: string): number | null {
-  const a = session.answers.find((x) => x.playerId === playerId && x.promptId === promptId)
+function getAnswer(session: Session, playerId: string, promptIndex: number): number | null {
+  const a = session.answers.find((x) => x.playerId === playerId && x.promptIndex === promptIndex)
   return a ? a.rating : null
 }
 
@@ -35,14 +35,14 @@ export function Reveal({ session, currentPlayer, socket, categories }: Props) {
       <div className="card">
         <h1 className="title">Results</h1>
         {session.currentPrompts.map((pr) => {
-          const a = getAnswer(session, p1.id, pr.id)
-          const b = getAnswer(session, p2.id, pr.id)
+          const a = getAnswer(session, p1.id, pr.index)
+          const b = getAnswer(session, p2.id, pr.index)
           const rows = [
             { player: p1, value: a, cls: 'p1' },
             { player: p2, value: b, cls: 'p2' }
           ]
           return (
-            <div key={pr.id} className="comparison-card">
+            <div key={pr.index} className="comparison-card">
               <div className="comparison-header">
                 {getCategoryName(pr.catId, categories)}
               </div>
