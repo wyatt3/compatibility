@@ -355,15 +355,37 @@ input {
 
 .rating-ticks {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   padding: 0 0.5rem;
 }
 
-.rating-ticks .tick {
+.rating-ticks .tick,
+.rating-ticks .tick-label {
+  flex: 0 0 8px;
   width: 8px;
+}
+
+.rating-ticks .tick {
   height: 8px;
   border-radius: 50%;
   background: var(--border-strong);
+}
+
+.rating-ticks .tick-label {
+  overflow: visible;
+  text-align: left;
+  white-space: nowrap;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.rating-ticks .tick-label:last-child {
+  position: relative;
+  right: 27px;
 }
 
 /* ---------- Status ---------- */

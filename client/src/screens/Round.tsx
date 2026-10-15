@@ -58,9 +58,11 @@ export function Round({ session, currentPlayer, socket, categories }: Props) {
                 onChange={(e) => setRating(p.index, Number(e.target.value))}
               />
               <div className="rating-ticks">
-                {[1, 2, 3, 4, 5].map((n) => (
+                <span className="tick-label">Disagree</span>
+                {[2, 3, 4].map((n) => (
                   <span key={n} className="tick" />
                 ))}
+                <span className="tick-label">Agree</span>
               </div>
             </div>
           </div>
