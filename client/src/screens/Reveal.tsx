@@ -116,7 +116,6 @@ export function Reveal({ session, currentPlayer, socket, categories }: Props) {
                   )
                 })}
                 <div className="comparison-slider-row comparison-axis">
-                  <span className="slider-player" aria-hidden="true" />
                   <div className="rating-ticks">
                     <span className="tick-label">Disagree</span>
                     <span className="tick" />

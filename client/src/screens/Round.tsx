@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import type { Session, Player, Prompt, Category } from '../types'
 import type { Socket } from 'socket.io-client'
 import { Header } from '../components/Header'
@@ -16,12 +16,17 @@ export function Round({ session, currentPlayer, socket, categories }: Props) {
   )
   const allRated = session.currentPrompts.every((p) => ratings[p.index] !== undefined)
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   const setRating = (promptIndex: number, rating: number) => {
     setRatings((prev) => ({ ...prev, [promptIndex]: rating }))
   }
 
   const submit = () => {
     if (!allRated) return
+    window.scrollTo(0, 0)
     const answers = session.currentPrompts.map((p) => ({
       promptIndex: p.index,
       rating: ratings[p.index]
